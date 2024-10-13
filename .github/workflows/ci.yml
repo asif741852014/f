@@ -1,0 +1,28 @@
+name: abc
+on:
+  push:
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: testdb
+        ports:
+          - 3306:3306
+    steps:
+    - uses: actions/checkout@v4
+    - name: wait for mysql to be ready
+      run: |
+        for i in {1..10}; do
+          if mysqladmin ping -h127.0.0.1 -P3306 -uroot -prootpassword --silent; then
+            echo "mysql is up"
+            break
+          fi
+          echo "waiting for response"
+          sleep 5;
+        done
+    - run: |
+        mysql -h 127.0.0.1 -P3306 -u root -prootpassword -e 'SHOW DATABASES;'

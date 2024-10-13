@@ -4,6 +4,8 @@ on:
 jobs:
   job1:
     runs-on: ubuntu-latest
+    container:
+      image: ubuntu
     services:
       mysql:
         image: mysql:5.7
@@ -17,7 +19,7 @@ jobs:
     - name: wait for mysql to be ready
       run: |
         for i in {1..10}; do
-          if mysqladmin ping -h127.0.0.1 -P3306 -uroot -prootpassword --silent; then
+          if mysqladmin ping -hmysql -P3306 -uroot -prootpassword --silent; then
             echo "mysql is up"
             break
           fi
@@ -25,4 +27,4 @@ jobs:
           sleep 5;
         done
     - run: |
-        mysql -h 127.0.0.1 -P3306 -u root -prootpassword -e 'SHOW DATABASES;'
+        mysql -h mysql -P3306 -u root -prootpassword -e 'SHOW DATABASES;'

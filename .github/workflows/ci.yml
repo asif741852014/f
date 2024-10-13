@@ -23,7 +23,7 @@ jobs:
     - name: wait for mysql to be ready
       run: |
         for i in {1..10}; do
-          if mysqladmin ping -hmysql -P3306 -uroot -prootpassword --silent; then
+          if mysqladmin ping -hmysql1 -P3306 -uroot -prootpassword --silent; then
             echo "mysql is up"
             break
           fi
@@ -31,4 +31,4 @@ jobs:
           sleep 5;
         done
     - run: |
-        mysql -h mysql -P3306 -u root -prootpassword -e 'SHOW DATABASES;'
+        mysql -h mysql1 -P3306 -u root -prootpassword -e 'SHOW DATABASES;'
